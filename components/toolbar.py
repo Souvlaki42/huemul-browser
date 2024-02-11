@@ -51,24 +51,24 @@ class ToolBar(QToolBar):
         button_back = self.addAction("Back")
         button_back.setIcon(QIcon("assets/icons/arrow-left.svg"))
         button_back.setToolTip("Back")
-        button_back.triggered.connect(self.parent.main.back)
+        button_back.triggered.connect(self.parent.browser.back)
 
         button_forward = self.addAction("Forward")
         button_forward.setIcon(QIcon("assets/icons/arrow-right.svg"))
         button_forward.setToolTip("Forward")
-        button_forward.triggered.connect(self.parent.main.forward)
+        button_forward.triggered.connect(self.parent.browser.forward)
 
         button_refresh = self.addAction("Refresh")
         button_refresh.setIcon(QIcon("assets/icons/refresh.svg"))
         button_refresh.setToolTip("Refresh")
-        button_refresh.triggered.connect(self.parent.main.reload)
+        button_refresh.triggered.connect(self.parent.browser.reload)
 
         label = QLabel()
         label.setPixmap(QIcon("assets/icons/search.svg").pixmap(QSize(12, 12)))
         self.addWidget(label)
 
         self.url_edit = QLineEdit()
-        self.url_edit.returnPressed.connect(lambda: self.parent.main.navigate(self.url_edit.text()))
+        self.url_edit.returnPressed.connect(lambda: self.parent.browser.navigate(self.url_edit.text()))
         self.url_edit.setPlaceholderText("Search or enter address")
         self.url_edit.setFont(QFont("Poppins", 11))
         self.addWidget(self.url_edit)

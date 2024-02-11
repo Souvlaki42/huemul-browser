@@ -1,9 +1,5 @@
 const form = document.getElementById("form");
-const news = document.getElementById("news");
-const newTemplate = document.getElementById("new-template").content;
 const clock = document.getElementById("clock");
-
-const NEWS_API_URL = "https://saurav.tech/NewsAPI/everything/bbc-news.json";
 
 const DATE_UNITS = [
   ["year", 31536000],
@@ -40,52 +36,6 @@ const dateToRelativeTime = (date) => {
   return rtf.format(value, unit);
 };
 
-const getNews = () => {
-  fetch(NEWS_API_URL)
-    .then((response) => response.json())
-    .then((data) => {
-      const fragment = document.createDocumentFragment();
-
-      data.articles.forEach(({ title, url, urlToImage, publishedAt }) => {
-        const clone = newTemplate.cloneNode(true);
-
-        const li = clone.querySelector(".new");
-        li.setAttribute("data-url", url);
-
-        if (urlToImage) {
-          const image = document.createElement("img");
-          image.classList.add("new__image");
-          image.loading = "lazy";
-          image.src = urlToImage;
-          image.alt = title;
-          li.firstElementChild.prepend(image);
-        }
-
-        date = new Date(publishedAt);
-
-        const link = clone.querySelector(".new__link");
-
-        if (title.length > 100) {
-          link.textContent = `${title.slice(0, 100).trim()}...`;
-          link.setAttribute("aria-label", title);
-        } else {
-          link.textContent = title;
-        }
-
-        link.href = url;
-
-        const time = clone.querySelector(".new__time");
-        time.textContent = dateToRelativeTime(date);
-        time.datetime = date.toISOString();
-
-        fragment.appendChild(clone);
-      });
-
-      news.textContent = "";
-      news.appendChild(fragment);
-    });
-};
-
 const handleSubmit = (e) => {
   e.preventDefault();
 
@@ -98,28 +48,12 @@ const handleSubmit = (e) => {
   window.location = `https://duckduckgo.com/?q=${value}`;
 };
 
-const handleClickNews = ({ target }) => {
-  const newElement = target.closest(".new");
-
-  if (!newElement) return;
-
-  window.location = newElement.getAttribute("data-url");
-};
 
 const options = {
   root: null,
   rootMargin: "0px",
   threshold: 0.5,
 };
-
-const observer = new IntersectionObserver((entries) => {
-  if (entries[0].isIntersecting) {
-    getNews();
-    observer.disconnect();
-  }
-}, options);
-
-observer.observe(news);
 
 const updateClock = () => {
   const date = new Date();
@@ -134,7 +68,7 @@ const updateClock = () => {
 };
 
 updateClock();
+
 setInterval(updateClock, 10000);
 
 form.addEventListener("submit", handleSubmit);
-news.addEventListener("click", handleClickNews);

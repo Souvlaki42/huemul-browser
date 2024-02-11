@@ -1,10 +1,9 @@
 from PyQt6.QtWidgets import QApplication, QMainWindow
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFontDatabase, QIcon
-from components.tool_bar import ToolBar
-from components.main import Main
+from components.toolbar import ToolBar
+from components.browser import Browser
 import sys
-
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -24,22 +23,22 @@ class MainWindow(QMainWindow):
             }
         """)
 
-        self.main = Main(self)
+        self.browser = Browser(self)
 
-        self.tool_bar = ToolBar(self)
-        self.addToolBar(self.tool_bar)
+        self.toolbar = ToolBar(self)
+        self.addToolBar(self.toolbar)
 
-        self.setCentralWidget(self.main)
+        self.setCentralWidget(self.browser)
 
-        self.main.add_tab()
+        self.browser.add_tab()
 
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    QFontDatabase.addApplicationFont("assets/fonts/poppins/poppins-v19-latin-500.ttf")
+    QFontDatabase.addApplicationFont("assets/fonts/poppins/poppins-v19-latin-600.ttf")
+    QFontDatabase.addApplicationFont("assets/fonts/poppins/poppins-v19-latin-700.ttf")
+    QFontDatabase.addApplicationFont("assets/fonts/poppins/poppins-v19-latin-regular.ttf")
+    window = MainWindow()
+    window.show()
 
-app = QApplication(sys.argv)
-QFontDatabase.addApplicationFont("assets/fonts/poppins/poppins-v19-latin-500.ttf")
-QFontDatabase.addApplicationFont("assets/fonts/poppins/poppins-v19-latin-600.ttf")
-QFontDatabase.addApplicationFont("assets/fonts/poppins/poppins-v19-latin-700.ttf")
-QFontDatabase.addApplicationFont("assets/fonts/poppins/poppins-v19-latin-regular.ttf")
-window = MainWindow()
-window.show()
-
-sys.exit(app.exec())
+    sys.exit(app.exec())

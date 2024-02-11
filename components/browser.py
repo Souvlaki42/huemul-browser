@@ -6,7 +6,7 @@ from PyQt6.QtWebEngineCore import QWebEngineSettings, QWebEngineProfile
 import validators
 import os
 
-class Main(QTabWidget):
+class Browser(QTabWidget):
     def __init__(self, parent):
         super().__init__()
 
@@ -80,7 +80,7 @@ class Main(QTabWidget):
 
     def change_url(self):
         url = self.currentWidget().url().toString()
-        self.parent.tool_bar.url_edit.setText("" if url == self.homepage_url.toString() else url)
+        self.parent.toolbar.url_edit.setText("" if url == self.homepage_url.toString() else url)
 
     def change_title(self, tab, title):
         self.setTabText(self.indexOf(tab), title)
@@ -94,27 +94,25 @@ class Main(QTabWidget):
         self.move_add_tab_button()
 
     def move_add_tab_button(self):
-        tap_bar = self.tabBar()
-        tap_bar.setFixedWidth(0)
+        tab_bar = self.tabBar()
+        tab_bar.setFixedWidth(0)
 
         tabs_width = 0
 
-        for i in range(tap_bar.count()):
-            tabs_width += tap_bar.tabRect(i).width()
+        for i in range(tab_bar.count()):
+            tabs_width += tab_bar.tabRect(i).width()
 
-        tap_bar.setFixedWidth(tabs_width)
+        tab_bar.setFixedWidth(tabs_width)
 
-        tab_bar_width = tap_bar.width()
+        tab_bar_width = tab_bar.width()
+        add_tab_button_width = self.add_tab_button.width()
 
-        self.add_tab_button.move(tab_bar_width, 0)
-
-        width = self.width()
-        button_width = self.add_tab_button.width()
-        difference = width - button_width
-
-        if self.add_tab_button.x() > difference:
-            tap_bar.setFixedWidth(difference)
-            self.add_tab_button.move(width - self.add_tab_button.width(), 0)
+        # If tabs exceed the available width, enable scrolling
+        if tabs_width > tab_bar_width:
+            tab_bar.setFixedWidth(tab_bar_width - add_tab_button_width)
+            self.add_tab_button.move(tab_bar_width - add_tab_button_width, 0)
+        else:
+            self.add_tab_button.move(tab_bar_width, 0)
 
     def select_tab(self, index):
         self.setCurrentIndex(index)
@@ -168,7 +166,7 @@ class Main(QTabWidget):
         if validators.url(url):
             normalized_url = url
         elif validators.domain(url):
-            normalized_url = f"http://{url}"
+            normalized_url = f"https://{url}"
         else:
             normalized_url = f"https://duckduckgo.com/?q={url}"
 
